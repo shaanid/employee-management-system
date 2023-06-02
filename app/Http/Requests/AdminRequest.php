@@ -27,7 +27,7 @@ class AdminRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                'unique:users',
+                // 'unique:users',
             ],
             'password' => [
                 'required',
