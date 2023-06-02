@@ -32,7 +32,7 @@ class DesignationController extends Controller
 
     public function update(DesignationRequest $request, Designation $designation): JsonResponse
     {
-       
+      
         $designation->fill($request->all());
         $designation->save();
 
