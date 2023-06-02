@@ -28,7 +28,7 @@ class DesignationController extends Controller
             'message' => 'Designation Created successfully',
             'data' => new DesignationResource($designation)
         ]);
-    }
+    }  
 
     public function update(DesignationRequest $request, Designation $designation): JsonResponse
     {
