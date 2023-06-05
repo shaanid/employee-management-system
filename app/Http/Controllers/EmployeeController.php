@@ -10,6 +10,7 @@ use App\DataTables\UsersDataTable;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UserExport;
 use Illuminate\Support\Facades\Hash;
+use App\Actions\EmployeeAction;
 
 
 class EmployeeController extends Controller
@@ -27,28 +28,9 @@ class EmployeeController extends Controller
         return view('employee.employeeRegister', compact('roles'));
     }
 
-    public function store(AdminRequest  $request)
+    public function store(AdminRequest $request, EmployeeAction $employeeAction)
     {
-        $input = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'position_id' => $request->position_id,
-            'dob' => $request->dob,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-        ];
-
-        if (request()->hasFile('image')) {
-            $input['image'] = 'profile_photo' . time() . '.' . request('image')->extension();
-            request('image')->storeAs('public/images', $input['image']);
-        }
-
-        $datas = User::create($input);
-
-        return redirect()
-            ->route('employee-details.index')
-            ->with('message', "Successfully Added");
+        return $employeeAction->execute($request);
     }
 
     public function edit(User $user)
@@ -57,21 +39,14 @@ class EmployeeController extends Controller
         return view('employee.employeeEdit', compact('user', 'designations'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, EmployeeAction $employeeAction)
     {
-        $user->update($request->all());
-
-        return redirect()
-            ->route('employee-details.index')
-            ->with('success', "Successfully updated");
+        return $employeeAction->update($request, $user);
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user, EmployeeAction $employeeAction)
     {
-        $user->delete();
-
-        return redirect()
-            ->route('employee-details.index');
+      return $employeeAction->destroy($user);
     }
 
 

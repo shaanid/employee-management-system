@@ -10,8 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DesignationExport;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Response;
-
-
+use App\Actions\DesignationAction;
 
 class DesignationController extends Controller
 {
@@ -26,14 +25,9 @@ class DesignationController extends Controller
         return view('designation.designationAdd');
     }
 
-    public function store(DesignationRequest $request)
+    public function store(DesignationRequest $request, DesignationAction $DesignationAction)
     {
-        $roles = Designation::create([
-            'designation' => $request->designation,
-        ]);
-
-        return redirect()->route('designation-details.index')
-            ->with('success', "Successfully Added");
+        return $DesignationAction->execute($request);
     }
 
     public function edit(Designation $designation)
@@ -41,21 +35,14 @@ class DesignationController extends Controller
         return view('designation.designationEdit', compact('designation'));
     }
 
-    public function update(DesignationRequest $request, Designation $designation)
+    public function update(DesignationRequest $request, Designation $designation, DesignationAction $DesignationAction)
     {
-        $designation->update($request->all());
-
-        return redirect()
-            ->route('designation-details.index')
-            ->with('message', "Successfully updated");
+        return $DesignationAction->update($request, $designation);
     }
 
-    public function destroy(Designation $designation)
+    public function destroy(Designation $designation, DesignationAction $DesignationAction)
     {
-        $designation->delete();
-
-        return redirect()
-            ->route('designation-details.index');
+        return $DesignationAction->destroy($designation);
     }
 
     public function deleteSelected(Request $request)
