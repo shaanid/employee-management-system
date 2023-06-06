@@ -55,6 +55,9 @@
             <div class="form-group">
                 <label for="dob">Date of birth</label>
                 <input type="date" name="dob" class="form-control" id="dob">
+                @error('dob')
+                <p class="alert alert-danger">{{ $message }} </p>
+            @enderror
             </div>
 
             <div class="form-group">

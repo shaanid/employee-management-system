@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use Illuminate\Http\Request;
 use \App\Models\designation;
 use \App\Models\user;
@@ -10,7 +11,8 @@ use App\DataTables\UsersDataTable;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\UserExport;
 use Illuminate\Support\Facades\Hash;
-use App\Actions\EmployeeAction;
+use App\Actions\Employee\StoreEmployeeAction;
+use App\Actions\Employee\UpdateEmployeeAction;
 
 
 class EmployeeController extends Controller
@@ -28,9 +30,13 @@ class EmployeeController extends Controller
         return view('employee.employeeRegister', compact('roles'));
     }
 
-    public function store(AdminRequest $request, EmployeeAction $employeeAction)
+    public function store(AdminRequest $request, StoreEmployeeAction $storeemployeeaction)
     {
-        return $employeeAction->execute($request);
+        $storeemployeeaction->execute(collect($request->validated()));
+
+        return redirect()
+        ->route('employee-details.index')
+        ->with('message', "Successfully Added");
     }
 
     public function edit(User $user)
@@ -39,14 +45,21 @@ class EmployeeController extends Controller
         return view('employee.employeeEdit', compact('user', 'designations'));
     }
 
-    public function update(Request $request, User $user, EmployeeAction $employeeAction)
+    public function update(UpdateEmployeeRequest $request, User $user, UpdateEmployeeAction $UpdateEmployeeAction)
     {
-        return $employeeAction->update($request, $user);
+        $collection = collect($request->validated());
+        $UpdateEmployeeAction->execute($collection, $user);
+
+        return redirect()->route('employee-details.index')
+            ->with('success', "Successfully updated");
     }
 
-    public function destroy(User $user, EmployeeAction $employeeAction)
+    public function destroy(User $user)
     {
-      return $employeeAction->destroy($user);
+        $user->delete();
+
+        return redirect()
+            ->route('employee-details.index');
     }
 
 
