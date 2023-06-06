@@ -17,7 +17,7 @@
                     <tr>
                         <td><input type="text" class="form-control" id="designation" name="designation">
                             @error('designation')
-                            <p class="alert alert-danger">{{ $message }} </p>
+                                <p class="alert alert-danger">{{ $message }} </p>
                             @enderror
         </div>
         <br>
@@ -30,5 +30,5 @@
         </div>
     </form>
 
-  @include('admin.footer')
+    @include('admin.footer')
 @endsection

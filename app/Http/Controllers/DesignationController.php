@@ -10,7 +10,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DesignationExport;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Response;
-use App\Actions\DesignationAction;
+use App\Actions\Designation\StoreDesignationAction;
+use App\Actions\Designation\UpdateDesignationAction;
+use App\Actions\Designation\DestroyDesignationAction;
 
 class DesignationController extends Controller
 {
@@ -25,9 +27,12 @@ class DesignationController extends Controller
         return view('designation.designationAdd');
     }
 
-    public function store(DesignationRequest $request, DesignationAction $DesignationAction)
+    public function store(DesignationRequest $request, StoreDesignationAction $StoreDesignationAction)
     {
-        return $DesignationAction->execute($request);
+        $StoreDesignationAction->execute(collect($request->validated()));
+
+        return redirect()->route('designation-details.index')
+            ->with('success', "Successfully Added");
     }
 
     public function edit(Designation $designation)
@@ -35,14 +40,22 @@ class DesignationController extends Controller
         return view('designation.designationEdit', compact('designation'));
     }
 
-    public function update(DesignationRequest $request, Designation $designation, DesignationAction $DesignationAction)
+    public function update(DesignationRequest $request, Designation $designation, UpdateDesignationAction $updateDesignationAction)
     {
-        return $DesignationAction->update($request, $designation);
+        $collection = collect($request->validated());
+        $updateDesignationAction->execute($collection, $designation);
+
+        return redirect()
+            ->route('designation-details.index')
+            ->with('message', 'Successfully updated');
     }
 
-    public function destroy(Designation $designation, DesignationAction $DesignationAction)
+    public function destroy(Designation $designation)
     {
-        return $DesignationAction->destroy($designation);
+        $designation->delete();
+
+        return redirect()
+            ->route('designation-details.index');
     }
 
     public function deleteSelected(Request $request)
