@@ -28,6 +28,7 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::post('user/select-all', 'EmployeeController@deleteSelected')->name('user.select-all');
     Route::get('designations/csv', 'DesignationController@exportDesignationsCSV')->name('designations.csv');
     Route::get('users/csv', 'EmployeeController@exportUsersCSV')->name('users.csv');
+    Route::get('roles','Rolecontroller@getRole');
 });
 
 //User Routes

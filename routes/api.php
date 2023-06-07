@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DesignationController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\Api\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,7 @@ Route::middleware('auth:sanctum')->group(function ()
     //Employee Api
     Route::resource('employee-details', EmployeeController::class)
         ->only('index', 'store', 'update', 'show', 'destroy');
+
+    //User Role Api
+    Route::get('users/role', [RoleController::class, 'getRole']);
 });

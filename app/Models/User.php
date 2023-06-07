@@ -36,6 +36,14 @@ class User extends Authenticatable
         return $this->belongsTo(designation::class, 'position_id',);
     }
 
+    // In User model
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+
     /**
      * The attributes that should be hidden for serialization.
      *
