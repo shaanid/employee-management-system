@@ -18,8 +18,7 @@ class isuser
         if (auth()->check()) {
             return $next($request);
         } else {
-            return redirect()
-                ->route('login');
+            return new Response('Unauthorized Access', 401);
         }
     }
 }

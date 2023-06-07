@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -36,13 +37,17 @@ class User extends Authenticatable
         return $this->belongsTo(designation::class, 'position_id',);
     }
 
-    // In User model
-
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_roles');
     }
-
+    
+    public function scopeUserRole(Builder $query, int $roleId)
+    {
+        return $query->whereHas('roles', function ($query) use ($roleId) {
+            $query->where('roles.id', $roleId);
+        });
+    }
 
     /**
      * The attributes that should be hidden for serialization.

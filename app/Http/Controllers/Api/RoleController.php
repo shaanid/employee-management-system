@@ -10,11 +10,8 @@ class RoleController extends Controller
 {
     public function getRole()
     {
-        $users = User::whereHas('roles', function ($query) {
-            $query->where('roles.id', 3);
-        })->get();
+        $users = User::UserRole(3)->get();
 
         return response()->json($users);
-    
 }
 }

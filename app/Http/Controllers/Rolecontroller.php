@@ -10,9 +10,7 @@ class Rolecontroller extends Controller
 {
     public function getRole()
 {
-    $users = User::whereHas('roles', function ($query) {
-        $query->where('roles.id', 3);
-    })->get();
+    $users = User::UserRole(3)->get();
 
     return view('role.role',compact('users'));
 }

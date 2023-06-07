@@ -32,6 +32,6 @@ Route::middleware('auth:sanctum')->group(function ()
     Route::resource('employee-details', EmployeeController::class)
         ->only('index', 'store', 'update', 'show', 'destroy');
 
-    //User Role Api
+    //User Roles Api
     Route::get('users/role', [RoleController::class, 'getRole']);
 });

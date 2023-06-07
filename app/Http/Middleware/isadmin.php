@@ -21,7 +21,8 @@ class isadmin
             }
             return redirect()->route('login');
          }
-         return redirect()->route('login');
-      }
-
+         else {
+            return new Response('Unauthorized Access', 401);
+        }
+   }
 }
